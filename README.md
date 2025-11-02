@@ -265,6 +265,7 @@ strategies=[
 ### 🚀 Quick Start
 - **[COMPLETE_INTEGRATION_SUMMARY.md](COMPLETE_INTEGRATION_SUMMARY.md)** - Master guide with all 5 deployment options
 - **[DEPLOYMENT_COMPARISON.md](DEPLOYMENT_COMPARISON.md)** - Detailed comparison to choose the right method
+- **[GATEWAY_INTEGRATION_DETAILED.md](GATEWAY_INTEGRATION_DETAILED.md)** - Complete Gateway + Official MCP explanation
 
 ### 🔧 Technical Guides  
 - **[DETAILED_DOCUMENTATION.md](DETAILED_DOCUMENTATION.md)** - Complete technical deep-dive
