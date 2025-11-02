@@ -1,0 +1,190 @@
+# AgentCore Internet Assistant 🤖
+
+A production-ready AI assistant built with Amazon Bedrock AgentCore that can fetch internet data, remember conversations, and serve users through a web interface.
+
+![Architecture](architecture-diagram.png)
+
+## 🚀 Features
+
+- **AgentCore Runtime**: Serverless deployment with automatic scaling
+- **AgentCore Memory**: Persistent conversation memory with user preferences extraction
+- **AgentCore Gateway**: Secure MCP tools for internet data fetching
+- **AgentCore Identity**: JWT-based authentication with Cognito
+- **Web Frontend**: Responsive chat interface hosted on S3
+- **API Integration**: RESTful API via Lambda and API Gateway
+
+## 📋 Prerequisites
+
+- AWS CLI configured (`aws configure`)
+- Python 3.10+ with pip
+- AgentCore CLI: `pip install bedrock-agentcore-cli`
+- Access to Amazon Bedrock models (Claude 3.7 Sonnet)
+
+## ⚡ Quick Start
+
+```bash
+# Clone and deploy
+git clone <your-repo-url>
+cd agentcore-app
+./deploy_complete.sh
+```
+
+The script will:
+1. Install dependencies
+2. Create AgentCore Memory resources
+3. Deploy AWS infrastructure (S3, API Gateway, Lambda)
+4. Deploy AgentCore agent
+5. Configure and upload frontend
+
+## 🏗️ Architecture
+
+The application uses a serverless architecture with the following components:
+
+### Frontend Layer
+- **S3 Static Website**: Hosts the chat interface
+- **CloudFront CDN**: Global content delivery
+
+### API Layer  
+- **API Gateway**: RESTful API endpoints
+- **Lambda**: Handles API requests and AgentCore integration
+
+### AgentCore Services
+- **Runtime**: Serverless agent execution environment
+- **Memory**: STM/LTM with preference extraction
+- **Gateway**: MCP tool discovery and execution
+- **Identity**: JWT authentication and session management
+
+### External Integration
+- **Internet APIs**: Web search and URL fetching
+- **Infrastructure**: ECR, IAM, CloudWatch for operations
+
+## 🛠️ Manual Deployment
+
+### 1. Setup Memory
+```bash
+python setup_memory.py
+export MEMORY_ID=<generated-memory-id>
+```
+
+### 2. Deploy Infrastructure
+```bash
+aws cloudformation deploy \
+  --template-file infrastructure.yaml \
+  --stack-name agentcore-internet-assistant \
+  --capabilities CAPABILITY_IAM
+```
+
+### 3. Deploy Agent
+```bash
+agentcore configure -e agent.py
+agentcore launch
+```
+
+### 4. Configure Frontend
+```bash
+# Update API endpoint in frontend
+API_ENDPOINT=$(aws cloudformation describe-stacks --stack-name agentcore-internet-assistant --query 'Stacks[0].Outputs[?OutputKey==`ApiEndpoint`].OutputValue' --output text)
+sed -i "s|YOUR_AGENTCORE_ENDPOINT|$API_ENDPOINT|g" frontend/index.html
+
+# Upload to S3
+BUCKET=$(aws cloudformation describe-stacks --stack-name agentcore-internet-assistant --query 'Stacks[0].Outputs[?OutputKey==`FrontendURL`].OutputValue' --output text | cut -d'/' -f3)
+aws s3 cp frontend/index.html s3://$BUCKET/
+```
+
+## 🔧 Available MCP Tools
+
+| Tool | Description | Example |
+|------|-------------|---------|
+| `fetch_url_data(url)` | Fetch content from any URL | "Get data from https://api.github.com/users/octocat" |
+| `search_web(query)` | Search web using DuckDuckGo | "Search for latest AWS news" |
+
+## 💬 Example Queries
+
+- "Fetch the latest commit from https://api.github.com/repos/aws/aws-cli/commits"
+- "Search for Amazon Bedrock pricing information"
+- "Get the content from https://aws.amazon.com/bedrock/"
+- "What's the weather API data from OpenWeatherMap?"
+
+## 🔒 Security Features
+
+- **JWT Authentication**: Cognito-based user authentication
+- **IAM Roles**: Least-privilege access controls
+- **HTTPS Only**: Encrypted communication
+- **Request Limits**: Timeout and size restrictions on external calls
+- **Session Isolation**: Per-user memory and state management
+
+## 📊 Monitoring
+
+- **CloudWatch Logs**: Automatic logging for all components
+- **AgentCore Observability**: Built-in request/response tracking
+- **Performance Metrics**: Response times and error rates
+- **Usage Analytics**: User interaction patterns
+
+## 🧹 Cleanup
+
+```bash
+# Delete CloudFormation stack
+aws cloudformation delete-stack --stack-name agentcore-internet-assistant
+
+# Delete AgentCore agent
+agentcore delete <agent-name>
+
+# Delete memory resources
+python -c "from bedrock_agentcore.memory import MemoryClient; client = MemoryClient(); client.delete_memory('$MEMORY_ID')"
+```
+
+## 🔧 Customization
+
+### Add New MCP Tools
+```python
+@mcp_server.tool()
+def analyze_sentiment(text: str) -> str:
+    """Analyze sentiment of text"""
+    # Your implementation
+    return result
+```
+
+### Extend Memory Strategies
+```python
+strategies=[
+    {
+        "customMemoryStrategy": {
+            "name": "insights",
+            "extraction_prompt": "Extract key insights"
+        }
+    }
+]
+```
+
+### Modify Frontend
+- Edit `frontend/index.html` for UI changes
+- Add CSS styling and JavaScript features
+- Integrate with additional APIs
+
+## 📚 Documentation
+
+- [Detailed Documentation](DETAILED_DOCUMENTATION.md) - Complete technical guide
+- [AgentCore Documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/agentcore.html)
+- [MCP Specification](https://modelcontextprotocol.io/)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- Create an issue for bugs or feature requests
+- Check the [troubleshooting guide](DETAILED_DOCUMENTATION.md#troubleshooting-guide)
+- Review AWS AgentCore documentation
+
+## 🏷️ Tags
+
+`aws` `bedrock` `agentcore` `ai` `mcp` `serverless` `python` `cloudformation` `lambda` `s3`
