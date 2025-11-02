@@ -133,10 +133,26 @@ aws s3 cp frontend/index.html s3://$BUCKET/
 
 ## 🔧 Available MCP Tools
 
+### Built-in Tools
 | Tool | Description | Example |
 |------|-------------|---------|
 | `fetch_url_data(url)` | Fetch content from any URL | "Get data from https://api.github.com/users/octocat" |
 | `search_web(query)` | Search web using DuckDuckGo | "Search for latest AWS news" |
+
+### Extended MCP Integration
+The project supports multiple MCP integration methods:
+
+1. **Direct Integration**: Add tools directly to the agent (`agent_with_multiple_mcp.py`)
+2. **AgentCore Gateway**: Connect to external MCP servers via Gateway (`agent_with_external_mcp.py`)
+3. **Local MCP Servers**: Run MCP servers locally for development (`docker-compose.yml`)
+
+See [MCP Integration Guide](MCP_INTEGRATION_GUIDE.md) for detailed instructions.
+
+### Additional Tool Categories Available
+- **File System**: Read files, list directories, file operations
+- **Database**: SQL queries, data operations  
+- **System**: Safe command execution, system monitoring
+- **Web Scraping**: Advanced web content extraction
 
 ## 💬 Example Queries
 

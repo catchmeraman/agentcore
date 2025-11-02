@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Filesystem MCP Server
+  filesystem-mcp:
+    build:
+      context: ./mcp-servers/filesystem
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./data:/app/data:ro  # Read-only access to data directory
+    environment:
+      - MCP_SERVER_NAME=filesystem
+      - ALLOWED_PATHS=/app/data
+    restart: unless-stopped
+
+  # Database MCP Server
+  database-mcp:
+    build:
+      context: ./mcp-servers/database
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./database:/app/database
+    environment:
+      - MCP_SERVER_NAME=database
+      - DATABASE_PATH=/app/database/app.db
+    restart: unless-stopped
+
+  # Web Scraping MCP Server
+  web-mcp:
+    build:
+      context: ./mcp-servers/web
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8000"
+    environment:
+      - MCP_SERVER_NAME=web
+      - RATE_LIMIT=10  # requests per minute
+    restart: unless-stopped
+
+  # AgentCore Agent (for local testing)
+  agentcore-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    ports:
+      - "8080:8080"
+    environment:
+      - MEMORY_ID=${MEMORY_ID}
+      - GATEWAY_URL=${GATEWAY_URL}
+      - GATEWAY_TOKEN=${GATEWAY_TOKEN}
+    depends_on:
+      - filesystem-mcp
+      - database-mcp
+      - web-mcp
+    restart: unless-stopped
+
+networks:
+  default:
+    name: agentcore-mcp-network
