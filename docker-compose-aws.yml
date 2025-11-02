@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # AWS Diagram MCP Server
+  aws-diagram-mcp:
+    build:
+      context: ./mcp-servers/aws-diagram
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - MCP_SERVER_NAME=aws-diagram
+    volumes:
+      - ./diagrams:/app/diagrams
+    restart: unless-stopped
+
+  # AWS EKS MCP Server
+  aws-eks-mcp:
+    build:
+      context: ./mcp-servers/aws-eks
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    environment:
+      - MCP_SERVER_NAME=aws-eks
+      - AWS_DEFAULT_REGION=us-west-2
+    volumes:
+      - ~/.aws:/root/.aws:ro
+      - ~/.kube:/root/.kube:ro
+    restart: unless-stopped
+
+  # AWS Terraform MCP Server
+  aws-terraform-mcp:
+    build:
+      context: ./mcp-servers/aws-terraform
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8000"
+    environment:
+      - MCP_SERVER_NAME=aws-terraform
+    volumes:
+      - ./terraform-configs:/app/terraform
+    restart: unless-stopped
+
+  # AWS Cost MCP Server
+  aws-cost-mcp:
+    build:
+      context: ./mcp-servers/aws-cost
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8000"
+    environment:
+      - MCP_SERVER_NAME=aws-cost
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - ~/.aws:/root/.aws:ro
+    restart: unless-stopped
+
+  # GitHub MCP Server
+  github-mcp:
+    build:
+      context: ./mcp-servers/github
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8000"
+    environment:
+      - MCP_SERVER_NAME=github
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    restart: unless-stopped
+
+  # AgentCore Agent with AWS MCP Integration
+  agentcore-aws-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.aws-agent
+    ports:
+      - "8080:8080"
+    environment:
+      - MEMORY_ID=${MEMORY_ID}
+      - AWS_DEFAULT_REGION=us-west-2
+    volumes:
+      - ~/.aws:/root/.aws:ro
+    depends_on:
+      - aws-diagram-mcp
+      - aws-eks-mcp
+      - aws-terraform-mcp
+      - aws-cost-mcp
+      - github-mcp
+    restart: unless-stopped
+
+networks:
+  default:
+    name: agentcore-aws-mcp-network
+
+volumes:
+  diagrams:
+  terraform-configs:

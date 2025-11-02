@@ -38,7 +38,15 @@ cd agentcore
 ./deploy_complete.sh
 ```
 
-Both scripts will:
+### Option 3: AWS MCP Integration (Comprehensive)
+```bash
+# Clone and deploy with specialized AWS MCP servers
+git clone https://github.com/catchmeraman/agentcore.git
+cd agentcore
+./deploy_aws_mcp.sh
+```
+
+All scripts will:
 1. Install dependencies
 2. Create AgentCore Memory resources
 3. Deploy AWS infrastructure
@@ -144,9 +152,17 @@ The project supports multiple MCP integration methods:
 
 1. **Direct Integration**: Add tools directly to the agent (`agent_with_multiple_mcp.py`)
 2. **AgentCore Gateway**: Connect to external MCP servers via Gateway (`agent_with_external_mcp.py`)
-3. **Local MCP Servers**: Run MCP servers locally for development (`docker-compose.yml`)
+3. **AWS MCP Servers**: Specialized AWS operations (`agent_with_aws_mcp.py`) - **NEW!**
+4. **Local MCP Servers**: Run MCP servers locally for development (`docker-compose.yml`)
 
-See [MCP Integration Guide](MCP_INTEGRATION_GUIDE.md) for detailed instructions.
+See [MCP Integration Guide](MCP_INTEGRATION_GUIDE.md) and [AWS MCP Integration](AWS_MCP_INTEGRATION.md) for detailed instructions.
+
+### AWS MCP Servers Available
+- **🏗️ AWS Diagram**: Generate architecture diagrams (`create_aws_diagram`, `create_serverless_diagram`)
+- **⚙️ AWS EKS**: Manage EKS clusters (`list_eks_clusters`, `get_cluster_info`, `generate_eks_manifest`)
+- **🔧 AWS Terraform**: Generate IaC (`generate_terraform_s3`, `generate_terraform_eks`, `terraform_plan`)
+- **💰 AWS Cost**: Cost analysis (`get_monthly_costs`, `get_rightsizing_recommendations`, `analyze_cost_anomalies`)
+- **🐙 GitHub**: Repository management (`list_repositories`, `get_file_content`, `search_repositories`)
 
 ### Additional Tool Categories Available
 - **File System**: Read files, list directories, file operations
