@@ -18,7 +18,20 @@ agentcore-app/
 ├── Infrastructure as Code
 ├── infrastructure.yaml               # CloudFormation template
 ├── deploy.sh                         # Basic deployment script
-├── deploy_complete.sh                # Complete automated deployment
+├── deploy_complete.sh                # Complete CloudFormation deployment
+├── deploy_terraform.sh               # Complete Terraform deployment
+│
+├── Terraform Infrastructure
+├── terraform/
+│   ├── main.tf                       # Provider configuration
+│   ├── variables.tf                  # Input variables
+│   ├── outputs.tf                    # Output values
+│   ├── s3.tf                         # S3 bucket for frontend
+│   ├── iam.tf                        # IAM roles and policies
+│   ├── lambda.tf                     # Lambda function
+│   ├── api_gateway.tf                # API Gateway configuration
+│   ├── cognito.tf                    # Cognito User Pool
+│   └── destroy.sh                    # Terraform cleanup script
 │
 ├── Frontend
 └── frontend/

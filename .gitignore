@@ -52,6 +52,15 @@ Thumbs.db
 # Logs
 *.log
 
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+*.tfvars
+*.tfplan
+api_handler.zip
+
 # Generated diagrams (keep main architecture diagram)
 generated-diagrams/
 !architecture-diagram.png

@@ -22,17 +22,26 @@ A production-ready AI assistant built with Amazon Bedrock AgentCore that can fet
 
 ## ⚡ Quick Start
 
+### Option 1: Terraform Deployment (Recommended)
 ```bash
-# Clone and deploy
-git clone <your-repo-url>
-cd agentcore-app
+# Clone and deploy with Terraform
+git clone https://github.com/catchmeraman/agentcore.git
+cd agentcore
+./deploy_terraform.sh
+```
+
+### Option 2: CloudFormation Deployment
+```bash
+# Clone and deploy with CloudFormation
+git clone https://github.com/catchmeraman/agentcore.git
+cd agentcore
 ./deploy_complete.sh
 ```
 
-The script will:
+Both scripts will:
 1. Install dependencies
 2. Create AgentCore Memory resources
-3. Deploy AWS infrastructure (S3, API Gateway, Lambda)
+3. Deploy AWS infrastructure
 4. Deploy AgentCore agent
 5. Configure and upload frontend
 
@@ -60,13 +69,44 @@ The application uses a serverless architecture with the following components:
 
 ## 🛠️ Manual Deployment
 
-### 1. Setup Memory
+### Terraform Deployment
+
+1. **Setup Memory**:
 ```bash
 python setup_memory.py
 export MEMORY_ID=<generated-memory-id>
 ```
 
-### 2. Deploy Infrastructure
+2. **Deploy AgentCore Agent**:
+```bash
+agentcore configure -e agent.py
+agentcore launch
+```
+
+3. **Deploy Infrastructure**:
+```bash
+cd terraform
+terraform init
+terraform plan -var="agent_arn=<your-agent-arn>"
+terraform apply -var="agent_arn=<your-agent-arn>"
+```
+
+4. **Configure Frontend**:
+```bash
+API_ENDPOINT=$(terraform output -raw api_endpoint)
+sed -i "s|YOUR_AGENTCORE_ENDPOINT|$API_ENDPOINT|g" ../frontend/index.html
+aws s3 cp ../frontend/index.html s3://$(terraform output -raw s3_bucket_name)/
+```
+
+### CloudFormation Deployment
+
+1. **Setup Memory**:
+```bash
+python setup_memory.py
+export MEMORY_ID=<your-memory-id>
+```
+
+2. **Deploy Infrastructure**:
 ```bash
 aws cloudformation deploy \
   --template-file infrastructure.yaml \
@@ -74,13 +114,13 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_IAM
 ```
 
-### 3. Deploy Agent
+3. **Deploy Agent**:
 ```bash
 agentcore configure -e agent.py
 agentcore launch
 ```
 
-### 4. Configure Frontend
+4. **Configure Frontend**:
 ```bash
 # Update API endpoint in frontend
 API_ENDPOINT=$(aws cloudformation describe-stacks --stack-name agentcore-internet-assistant --query 'Stacks[0].Outputs[?OutputKey==`ApiEndpoint`].OutputValue' --output text)
@@ -122,6 +162,14 @@ aws s3 cp frontend/index.html s3://$BUCKET/
 
 ## 🧹 Cleanup
 
+### Terraform Cleanup
+```bash
+cd terraform
+./destroy.sh
+# Manually delete AgentCore agent and memory resources
+```
+
+### CloudFormation Cleanup
 ```bash
 # Delete CloudFormation stack
 aws cloudformation delete-stack --stack-name agentcore-internet-assistant
