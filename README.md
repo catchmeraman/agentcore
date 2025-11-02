@@ -46,6 +46,14 @@ cd agentcore
 ./deploy_aws_mcp.sh
 ```
 
+### Option 4: Official AWS MCP Integration (Recommended)
+```bash
+# Clone and deploy with official AWS MCP servers from AWS Labs
+git clone https://github.com/catchmeraman/agentcore.git
+cd agentcore
+./deploy_official_aws_mcp.sh
+```
+
 All scripts will:
 1. Install dependencies
 2. Create AgentCore Memory resources
@@ -152,10 +160,21 @@ The project supports multiple MCP integration methods:
 
 1. **Direct Integration**: Add tools directly to the agent (`agent_with_multiple_mcp.py`)
 2. **AgentCore Gateway**: Connect to external MCP servers via Gateway (`agent_with_external_mcp.py`)
-3. **AWS MCP Servers**: Specialized AWS operations (`agent_with_aws_mcp.py`) - **NEW!**
-4. **Local MCP Servers**: Run MCP servers locally for development (`docker-compose.yml`)
+3. **AWS MCP Servers**: Specialized AWS operations (`agent_with_aws_mcp.py`)
+4. **Official AWS MCP**: Official AWS Labs MCP servers (`agent_with_official_aws_mcp.py`) - **RECOMMENDED!**
+5. **Local MCP Servers**: Run MCP servers locally for development (`docker-compose.yml`)
 
-See [MCP Integration Guide](MCP_INTEGRATION_GUIDE.md) and [AWS MCP Integration](AWS_MCP_INTEGRATION.md) for detailed instructions.
+See [MCP Integration Guide](MCP_INTEGRATION_GUIDE.md), [AWS MCP Integration](AWS_MCP_INTEGRATION.md), and [Official AWS MCP Integration](OFFICIAL_AWS_MCP_INTEGRATION.md) for detailed instructions.
+
+### Official AWS MCP Servers (Recommended)
+- **🏗️ AWS CLI MCP**: Direct AWS CLI integration with all services
+- **☁️ AWS CloudFormation MCP**: Stack management and template operations
+- **🖥️ AWS EC2 MCP**: Instance and VPC management
+- **🪣 AWS S3 MCP**: Bucket and object operations
+- **⚡ AWS Lambda MCP**: Function management and deployment
+- **🗄️ AWS RDS MCP**: Database management and monitoring
+- **🔐 AWS IAM MCP**: Identity and access management
+- **📊 AWS CloudWatch MCP**: Monitoring, logging, and metrics
 
 ### AWS MCP Servers Available
 - **🏗️ AWS Diagram**: Generate architecture diagrams (`create_aws_diagram`, `create_serverless_diagram`)

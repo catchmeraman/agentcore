@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Official AWS MCP Servers (will be dynamically configured)
+  aws-mcp-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.aws-mcp-proxy
+    ports:
+      - "8000-8010:8000-8010"
+    environment:
+      - AWS_DEFAULT_REGION=us-west-2
+    volumes:
+      - ~/.aws:/root/.aws:ro
+      - ./aws-mcp:/app/aws-mcp
+    restart: unless-stopped
+
+  # AgentCore Agent with Official AWS MCP
+  agentcore-official-aws:
+    build:
+      context: .
+      dockerfile: Dockerfile.official-aws-agent
+    ports:
+      - "8080:8080"
+    environment:
+      - MEMORY_ID=${MEMORY_ID}
+      - AWS_DEFAULT_REGION=us-west-2
+    volumes:
+      - ~/.aws:/root/.aws:ro
+      - ./aws-mcp:/app/aws-mcp
+    depends_on:
+      - aws-mcp-proxy
+    restart: unless-stopped
+
+networks:
+  default:
+    name: agentcore-official-aws-mcp
