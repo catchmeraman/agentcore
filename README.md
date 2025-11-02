@@ -260,11 +260,25 @@ strategies=[
 - Add CSS styling and JavaScript features
 - Integrate with additional APIs
 
-## 📚 Documentation
+## 📚 Complete Documentation
 
-- [Detailed Documentation](DETAILED_DOCUMENTATION.md) - Complete technical guide
-- [AgentCore Documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/agentcore.html)
-- [MCP Specification](https://modelcontextprotocol.io/)
+### 🚀 Quick Start
+- **[COMPLETE_INTEGRATION_SUMMARY.md](COMPLETE_INTEGRATION_SUMMARY.md)** - Master guide with all 5 deployment options
+- **[DEPLOYMENT_COMPARISON.md](DEPLOYMENT_COMPARISON.md)** - Detailed comparison to choose the right method
+
+### 🔧 Technical Guides  
+- **[DETAILED_DOCUMENTATION.md](DETAILED_DOCUMENTATION.md)** - Complete technical deep-dive
+- **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** - Project organization and file structure
+
+### 🤖 MCP Integration Guides
+- **[MCP_INTEGRATION_GUIDE.md](MCP_INTEGRATION_GUIDE.md)** - General MCP integration methods
+- **[AWS_MCP_INTEGRATION.md](AWS_MCP_INTEGRATION.md)** - Custom AWS MCP servers guide  
+- **[OFFICIAL_AWS_MCP_INTEGRATION.md](OFFICIAL_AWS_MCP_INTEGRATION.md)** - Official AWS Labs MCP integration
+- **[AGENTCORE_GATEWAY_MCP_INTEGRATION.md](AGENTCORE_GATEWAY_MCP_INTEGRATION.md)** - Enterprise Gateway integration
+
+### 📖 Simple Explanations
+- **[HOW_IT_WORKS_SIMPLE.md](HOW_IT_WORKS_SIMPLE.md)** - Layman's explanation of AgentCore + MCP
+- **[VISUAL_FLOW_DIAGRAM.md](VISUAL_FLOW_DIAGRAM.md)** - Step-by-step visual flow diagrams
 
 ## 🤝 Contributing
 
